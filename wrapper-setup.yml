@@ -1,0 +1,25 @@
+---
+
+- hosts: all
+
+  tasks:
+
+  - name: Transfer the wrapper binary
+    copy: 
+      src: ../iou/wrapper.bin
+      dest: /home/roger/iou/
+      mode: 0744
+
+  - name: Install libssl
+    become: true
+    apt: name={{ item }} update_cache=yes state=present
+    with_items:
+      - "libssl0.9.8:i386"
+      - "libssl-dev:i386"
+
+  - name: setup libcrypto.so.4
+    become: true
+    file:
+      src: /lib/i386-linux-gnu/libcrypt-2.19.so
+      dest: /usr/lib/libcrypto.so.4
+      state: link

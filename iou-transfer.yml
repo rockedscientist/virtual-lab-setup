@@ -1,0 +1,24 @@
+---
+
+- hosts: all
+
+  tasks:
+
+  - name: Tranfer keygen
+    copy: 
+      src: ../iou/keygen.py
+      dest: /home/roger/iou/
+      mode: 0744
+
+  - name: Run keygen
+    shell: ~/iou/keygen.py | head -n 7 | tail -n 2 > ~/iou/iourc
+
+  - name: Modify the hosts file to prevent calling home
+    become: true
+    shell:  echo '127.0.0.127 xml.cisco.com' >> /etc/hosts 
+
+  - name: Touch the NETMAP file so that the image can run
+    file:
+      path: ~/iou/NETMAP
+      state: touch
+      mode: 0644

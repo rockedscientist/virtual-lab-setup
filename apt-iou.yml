@@ -1,0 +1,17 @@
+---
+
+- hosts: all
+
+  tasks:
+
+  - name: Add 32-bit architecture
+    become: true
+    shell: dpkg --add-architecture i386
+
+  - name: Install 32-bit dependencies
+    become: true
+    apt: name={{ item }} update_cache=yes state=present
+    with_items:
+      - "libc6:i386"
+      - "libncurses5:i386"
+      - "libstdc++6:i386"
